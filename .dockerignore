@@ -1,0 +1,25 @@
+# Git
+.git
+.gitignore
+
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build artifacts (if any are generated locally and not needed in the image)
+# build/ (The Dockerfile handles copying the build from the builder stage)
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files (should be passed at runtime, not baked into the image)
+.env
+
+# Docker specific files
+Dockerfile
+.dockerignore
+
+# Editor/IDE specific files
+.vscode/

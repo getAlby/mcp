@@ -1,0 +1,167 @@
+{
+  "name": "NWC Paid Chat",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Roland. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0],
+      "id": "40c5549a-d844-4129-8ada-22e929ac62a6",
+      "name": "When chat message received",
+      "webhookId": "95256a48-d9ab-4bab-a58b-9741fa978992"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a paid chat service where the user has to pay before they get an answer to their prompt.\n\nWhen receiving {{ $json.chatInput }} if the user has not paid yet, make a 21 sat invoice that the user must pay and respond with \"Please pay the following invoice to continue and then type 'ok'\". (also show it as a QR code).\n\nOtherwise if you made an invoice already, lookup the invoice you sent to the user. If it was settled, then reply to the user's original chat message. Otherwise say \"The invoice was not paid yet\".",
+        "options": {
+          "systemMessage": ""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [440, 0],
+      "id": "60a4d31c-3a2c-406b-adec-c4dd4f0d72a3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "executeTool",
+        "toolName": "make_invoice",
+        "toolParameters": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Tool_Parameters', `use the amount field to set the amount (in millisats - 1000 millisats is 1 sat) and set the description to \"paid chat\".`, 'json') }}"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [700, 240],
+      "id": "72b9a32d-0460-4012-908a-ee2d301c0388",
+      "name": "MCP Client Make Invoice",
+      "credentials": {
+        "mcpClientApi": {
+          "id": "qeW4S9quHjbEpitE",
+          "name": "MCP Client (STDIO) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeTool",
+        "toolName": "lookup_invoice",
+        "toolParameters": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Tool_Parameters', `You should use the invoice you generated and sent to the user. It starts with lnbc... and should be passed as the \"invoice\" parameter.`, 'json') }}"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [860, 140],
+      "id": "696aa197-cd9f-4886-9dd9-7fe74e934fff",
+      "name": "MCP Client Lookup Invoice",
+      "credentials": {
+        "mcpClientApi": {
+          "id": "qeW4S9quHjbEpitE",
+          "name": "MCP Client (STDIO) account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [540, 220],
+      "id": "5e4e86ec-008d-4c6a-a1a4-4bbc9e05824c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3.7-sonnet",
+        "options": {
+          "maxTokens": 10000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [400, 220],
+      "id": "0e486af7-599e-43f5-9503-55407ef58f68",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "Nf72kYqXR9WwGx1n",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client Make Invoice": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [[]]
+    },
+    "MCP Client Lookup Invoice": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8ff6cc5a-1065-4b6d-a05e-4eb7e03f6e61",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d0a2265a2322c708aba889ae9378f25ca9e7eb32526f017f425ec772ae5f5245"
+  },
+  "id": "DjX5yx6CLJGAQIJe",
+  "tags": []
+}
