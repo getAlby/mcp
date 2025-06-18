@@ -27,6 +27,8 @@ export function addSSEEndpoints(app: Express) {
       return;
     }
 
+    console.info("New SSE session", req.query.sessionId);
+
     const client = new nwc.NWCClient({
       nostrWalletConnectUrl,
     });
@@ -37,6 +39,15 @@ export function addSSEEndpoints(app: Express) {
       server,
       transport,
     };
+    if (req.query.sessionId) {
+      console.info(
+        "Request provided its own session ID: " + req.query.sessionId
+      );
+      sessions[req.query.sessionId as string] = {
+        server,
+        transport,
+      };
+    }
     server.connect(transport);
   });
 
@@ -46,7 +57,9 @@ export function addSSEEndpoints(app: Express) {
     if (session) {
       session.transport.handlePostMessage(req, res);
     } else {
-      res.status(400).send("No transport found for sessionId");
+      res
+        .status(400)
+        .send("No transport found for sessionId: " + req.query.sessionId);
     }
   });
 }
