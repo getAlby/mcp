@@ -48,7 +48,6 @@ export function addSSEEndpoints(app: Express) {
       };
     }
     await server.connect(transport);
-    res.status(200).send();
   });
 
   app.post("/messages", (req, res) => {
@@ -56,6 +55,8 @@ export function addSSEEndpoints(app: Express) {
     console.info("SSE messages request", sessionId);
     const session = sessions[sessionId];
     if (session) {
+      console.info("Found session for messages request", sessionId);
+
       session.transport.handlePostMessage(req, res);
     } else {
       res
