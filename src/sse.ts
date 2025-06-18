@@ -16,7 +16,7 @@ export function addSSEEndpoints(app: Express) {
     }
   > = {};
 
-  app.get("/sse", (req, res) => {
+  app.get("/sse", async (req, res) => {
     const nostrWalletConnectUrl = getConnectionSecretFromBearerAuth(
       req.header("Authorization")
     );
@@ -26,8 +26,6 @@ export function addSSEEndpoints(app: Express) {
         .send("Bearer auth with NWC connection secret not provided");
       return;
     }
-
-    console.info("New SSE session", req.query.sessionId);
 
     const client = new nwc.NWCClient({
       nostrWalletConnectUrl,
@@ -39,6 +37,7 @@ export function addSSEEndpoints(app: Express) {
       server,
       transport,
     };
+    console.info("Created new SSE session", transport.sessionId);
     if (req.query.sessionId) {
       console.info(
         "Request provided its own session ID: " + req.query.sessionId
@@ -48,11 +47,13 @@ export function addSSEEndpoints(app: Express) {
         transport,
       };
     }
-    server.connect(transport);
+    await server.connect(transport);
+    res.status(200).send();
   });
 
   app.post("/messages", (req, res) => {
     const sessionId = req.query.sessionId as string;
+    console.info("SSE messages request", sessionId);
     const session = sessions[sessionId];
     if (session) {
       session.transport.handlePostMessage(req, res);
