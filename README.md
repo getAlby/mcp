@@ -15,7 +15,7 @@ If your agent supports SSE (e.g. N8N) or HTTP Streamable transports, you can con
 - SSE: `https://mcp.getalby.com/sse`
 - HTTP Streamable: `https://mcp.getalby.com/mcp`
 
-Both require providing an NWC connection secret as `Bearer` authentication.
+Both require providing an NWC connection secret as `Bearer` authentication. (header: `Authorization: Bearer nostr+walletconnect://...` )
 
 ### Add to Claude Desktop
 
@@ -103,7 +103,7 @@ By default NWC MCP Server runs locally in `STDIO` mode.
 
 You can set the following environment variable: `MODE=HTTP` which will enable Streamable HTTP (`http://localhost:3000/mcp`) and SSE (`http://localhost:3000/sse` Note: SSE is deprecated).
 
-HTTP requires bearer authorization, where the token is a wallet's NWC connection secret.
+HTTP requires bearer authorization, where the token is a wallet's NWC connection secret. (header example: `Authorization: Bearer nostr+walletconnect://...` )
 
 ## From Source
 
