@@ -47,7 +47,7 @@ export function addSSEEndpoints(app: Express) {
         transport,
       };
     }
-    await server.connect(transport);
+    server.connect(transport);
   });
 
   app.post("/messages", (req, res) => {
