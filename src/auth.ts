@@ -1,4 +1,4 @@
-export function getConnectionSecretFromBearerAuth(
+function getConnectionSecretFromBearerAuth(
   authorizationHeader: string | undefined
 ) {
   const authParts = authorizationHeader?.split(" ");
@@ -12,7 +12,7 @@ export function getConnectionSecretFromBearerAuth(
   return authParts[1];
 }
 
-export function getConnectionSecretFromQueryParam(
+function getConnectionSecretFromQueryParam(
   nwcParam: string | undefined
 ): string | undefined {
   if (!nwcParam || !nwcParam.startsWith("nostr+walletconnect://")) {
