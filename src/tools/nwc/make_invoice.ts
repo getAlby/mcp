@@ -10,7 +10,7 @@ export function registerMakeInvoiceTool(
     "make_invoice",
     "Create a lightning invoice",
     {
-      amount: z.number().describe("amount in millisats"),
+      amount: z.number().describe("amount in millisatoshis (millisats)"),
       expiry: z.number().describe("expiry in seconds").nullish(),
       description: z
         .string()
