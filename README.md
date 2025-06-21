@@ -6,6 +6,10 @@ This MCP server uses the [official MCP TypeScript SDK](https://github.com/modelc
 
 This MCP server has knowledge of [NWC](https://nwc.dev/), [LNURL](https://github.com/lnurl/luds) and [L402](https://docs.lightning.engineering/the-lightning-network/l402) using [Alby SDK](https://github.com/getAlby/js-sdk) and [Alby Lightning Tools](https://github.com/getAlby/js-lightning-tools).
 
+<a href="https://glama.ai/mcp/servers/@getAlby/mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@getAlby/mcp/badge" />
+</a>
+
 ## Quick Start
 
 ### Use the Alby-Hosted MCP Server
