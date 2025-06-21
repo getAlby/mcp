@@ -6,6 +6,7 @@ import { registerLookupInvoiceTool } from "./tools/nwc/lookup_invoice.js";
 import { registerMakeInvoiceTool } from "./tools/nwc/make_invoice.js";
 import { registerPayInvoiceTool } from "./tools/nwc/pay_invoice.js";
 import { registerGetBalanceTool } from "./tools/nwc/get_balance.js";
+import { registerListTransactionsTool } from "./tools/nwc/list_transactions.js";
 import { registerFetchL402Tool } from "./tools/lightning/fetch_l402.js";
 import { registerFiatToSatsTool } from "./tools/lightning/fiat_to_sats.js";
 import { registerParseInvoiceTool } from "./tools/lightning/parse_invoice.js";
@@ -27,6 +28,7 @@ export function createMCPServer(client: nwc.NWCClient): McpServer {
   registerPayInvoiceTool(server, client);
   registerGetBalanceTool(server, client);
   registerLookupInvoiceTool(server, client);
+  registerListTransactionsTool(server, client);
 
   // Lightning tools
   registerFetchL402Tool(
