@@ -3,7 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { Express } from "express";
 import { createMCPServer } from "./mcp_server.js";
-import { getConnectionSecretFromBearerAuth } from "./auth.js";
+import { getConnectionSecret } from "./auth.js";
 
 export function addSSEEndpoints(app: Express) {
   // Store transports for each session type
@@ -17,13 +17,14 @@ export function addSSEEndpoints(app: Express) {
   > = {};
 
   app.get("/sse", async (req, res) => {
-    const nostrWalletConnectUrl = getConnectionSecretFromBearerAuth(
-      req.header("Authorization")
+    const nostrWalletConnectUrl = getConnectionSecret(
+      req.header("Authorization"),
+      req.query.nwc as string
     );
     if (!nostrWalletConnectUrl) {
       res
         .status(400)
-        .send("Bearer auth with NWC connection secret not provided");
+        .send("Bearer auth with NWC connection secret or nwc query parameter not provided");
       return;
     }
 

@@ -2,7 +2,7 @@ import { Express, Request, Response } from "express";
 import { createMCPServer } from "./mcp_server.js";
 import { nwc } from "@getalby/sdk";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { getConnectionSecretFromBearerAuth } from "./auth.js";
+import { getConnectionSecret } from "./auth.js";
 import { json } from "express";
 
 export function addStreamableHttpEndpoints(app: Express) {
@@ -11,13 +11,14 @@ export function addStreamableHttpEndpoints(app: Express) {
     // to ensure complete isolation. A single instance would cause request ID collisions
     // when multiple clients connect concurrently.
     try {
-      const nostrWalletConnectUrl = getConnectionSecretFromBearerAuth(
-        req.header("Authorization")
+      const nostrWalletConnectUrl = getConnectionSecret(
+        req.header("Authorization"),
+        req.query.nwc as string
       );
       if (!nostrWalletConnectUrl) {
         res
           .status(400)
-          .send("Bearer auth with NWC connection secret not provided");
+          .send("Bearer auth with NWC connection secret or nwc query parameter not provided");
         return;
       }
 
