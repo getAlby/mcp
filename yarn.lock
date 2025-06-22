@@ -14,10 +14,10 @@
   dependencies:
     nostr-tools "2.9.4"
 
-"@modelcontextprotocol/sdk@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.12.0.tgz#c3ac98b7f31db068c218a4ce8c9013ac3f5713ce"
-  integrity sha512-m//7RlINx1F3sz3KqwY1WWzVgTcYX52HYk4bJ1hkBXV3zccAEth+jRvG8DBRrdaQuRsPAJOx2MH3zaHNCKL7Zg==
+"@modelcontextprotocol/sdk@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.13.0.tgz#4ac5f4db34b78ce2da09915821869c618909e692"
+  integrity sha512-P5FZsXU0kY881F6Hbk9GhsYx02/KgWK1DYf7/tyE/1lcFKhDYPQR9iYjhQXJn+Sg6hQleMo3DB7h7+p4wgp2Lw==
   dependencies:
     ajv "^6.12.6"
     content-type "^1.0.5"

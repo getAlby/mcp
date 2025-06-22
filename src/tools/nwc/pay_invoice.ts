@@ -13,7 +13,9 @@ export function registerPayInvoiceTool(
       invoice: z.string().describe("The lightning invoice to pay"),
       amount: z
         .number()
-        .describe("Optional amount in millisats to pay a zero-amount invoice")
+        .describe(
+          "Optional amount in millisats, only provide if paying a zero-amount invoice"
+        )
         .nullish(),
       metadata: z
         .object({})
