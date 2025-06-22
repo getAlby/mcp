@@ -2,30 +2,33 @@ import { fiat } from "@getalby/lightning-tools";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-// Define Zod schema for the response - returns number of satoshis
-const FiatToSatsResponseSchema = z.number().describe("Amount in satoshis (sats)");
-
 export function registerFiatToSatsTool(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "fiat_to_sats",
-    "Convert fiat amounts to satoshis (sats)",
     {
-      currency: z.string().describe("the fiat currency (e.g., USD, EUR)"),
-      amount: z.number().describe("fiat amount to convert to sats"),
+      title: "Fiat To Sats",
+      description: "Convert fiat amounts to sats",
+      inputSchema: {
+        currency: z.string().describe("the fiat currency (e.g., USD, EUR)"),
+        amount: z.number().describe("fiat amount to convert"),
+      },
+      outputSchema: {
+        satoshi: z.number().describe("Amount in sats"),
+      },
     },
     async (params) => {
       const satoshi = await fiat.getSatoshiValue(params);
-      
-      // Validate the response
-      const validatedSatoshi = FiatToSatsResponseSchema.parse(satoshi);
 
       return {
         content: [
           {
             type: "text",
-            text: validatedSatoshi.toString(),
+            text: JSON.stringify({ satoshi }),
           },
         ],
+        structuredContent: {
+          satoshi,
+        },
       };
     }
   );

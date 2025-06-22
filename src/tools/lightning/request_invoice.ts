@@ -7,12 +7,12 @@ export function registerRequestInvoiceFromLightningAddressTool(
 ) {
   server.tool(
     "request_invoice",
-    "Request an invoice from a lightning address (amount specified in satoshis)",
+    "Request an invoice from a lightning address",
     {
       lightning_address: z
         .string()
         .describe("the recipient's lightning address"),
-      amount: z.number().describe("amount in satoshis (sats)"),
+      amount: z.number().describe("amount in sats"),
       description: z
         .string()
         .describe("note, memo or description describing the invoice")

@@ -13,13 +13,11 @@ import { registerParseInvoiceTool } from "./tools/lightning/parse_invoice.js";
 import { registerRequestInvoiceFromLightningAddressTool } from "./tools/lightning/request_invoice.js";
 
 export function createMCPServer(client: nwc.NWCClient): McpServer {
-  const server = new McpServer(
-    {
-      name: "@getalby/mcp",
-      version: "1.0.0",
-    },
-    {}
-  );
+  const server = new McpServer({
+    name: "@getalby/mcp",
+    version: "1.0.0",
+    title: "Alby MCP Server",
+  });
 
   // NWC
   registerGetWalletServiceInfoTool(server, client);
