@@ -13,31 +13,36 @@ export function registerListTransactionsTool(
       from: z
         .number()
         .describe("Start timestamp (Unix epoch) for filtering transactions")
-        .optional(),
+        .nullish(),
       until: z
         .number()
         .describe("End timestamp (Unix epoch) for filtering transactions")
-        .optional(),
+        .nullish(),
       limit: z
         .number()
         .describe("Maximum number of transactions to return")
-        .optional(),
+        .nullish(),
+      offset: z
+        .number()
+        .describe("Offset of the first transaction to return")
+        .nullish(),
       type: z
         .enum(["incoming", "outgoing"])
         .describe("Filter transactions by type")
-        .optional(),
+        .nullish(),
       unpaid: z
         .boolean()
         .describe("Filter for unpaid transactions only")
-        .optional(),
+        .nullish(),
     },
     async (params) => {
       const result = await client.listTransactions({
-        from: params.from,
-        until: params.until,
-        limit: params.limit,
-        type: params.type,
-        unpaid: params.unpaid,
+        from: params.from || undefined,
+        until: params.until || undefined,
+        limit: params.limit || undefined,
+        type: params.type || undefined,
+        unpaid: params.unpaid || undefined,
+        offset: params.offset || undefined,
       });
       return {
         content: [
