@@ -7,18 +7,25 @@ export function registerFetchL402Tool(
   server: McpServer,
   webln: webln.NostrWebLNProvider
 ) {
-  server.tool(
+  server.registerTool(
     "fetch_l402",
-    "Fetch a paid resource protected by L402",
     {
-      url: z.string().describe("the URL to fetch"),
-      method: z.string().nullish().describe("HTTP request method. Default GET"),
-      body: z
-        .string()
-        .nullish()
-        .describe(
-          "HTTP request body as a string (either plaintext or stringified JSON)"
-        ),
+      title: "Fetch L402",
+      description: "Fetch a paid resource protected by L402",
+      inputSchema: {
+        url: z.string().describe("the URL to fetch"),
+        method: z.string().nullish().describe("HTTP request method. Default GET"),
+        body: z
+          .string()
+          .nullish()
+          .describe(
+            "HTTP request body as a string (either plaintext or stringified JSON)"
+          ),
+      },
+      outputSchema: {
+        content: z.string().describe("Response content"),
+        status: z.number().describe("HTTP status code"),
+      },
     },
     async (params) => {
       const requestOptions: RequestInit = {
@@ -55,6 +62,11 @@ export function registerFetchL402Tool(
         );
       }
 
+      const responseData = {
+        content: responseContent,
+        status: result.status,
+      };
+
       return {
         content: [
           {
@@ -62,6 +74,7 @@ export function registerFetchL402Tool(
             text: responseContent,
           },
         ],
+        structuredContent: responseData,
       };
     }
   );

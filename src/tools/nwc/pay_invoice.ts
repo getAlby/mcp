@@ -6,22 +6,29 @@ export function registerPayInvoiceTool(
   server: McpServer,
   client: nwc.NWCClient
 ) {
-  server.tool(
+  server.registerTool(
     "pay_invoice",
-    "Pay a lightning invoice",
     {
-      invoice: z.string().describe("The lightning invoice to pay"),
-      amount: z
-        .number()
-        .describe(
-          "Optional amount in millisats, only provide if paying a zero-amount invoice"
-        )
-        .nullish(),
-      metadata: z
-        .object({})
-        .passthrough()
-        .describe("Optional metadata to include with the payment")
-        .nullish(),
+      title: "Pay Invoice",
+      description: "Pay a lightning invoice",
+      inputSchema: {
+        invoice: z.string().describe("The lightning invoice to pay"),
+        amount: z
+          .number()
+          .describe(
+            "Optional amount in millisats, only provide if paying a zero-amount invoice"
+          )
+          .nullish(),
+        metadata: z
+          .object({})
+          .passthrough()
+          .describe("Optional metadata to include with the payment")
+          .nullish(),
+      },
+      outputSchema: {
+        preimage: z.string().describe("Payment preimage"),
+        fees_paid: z.number().describe("Fees paid in millisats"),
+      },
     },
     async (params) => {
       const result = await client.payInvoice({
@@ -29,6 +36,7 @@ export function registerPayInvoiceTool(
         amount: params.amount || undefined,
         metadata: params.metadata || undefined,
       });
+      
       return {
         content: [
           {
@@ -36,6 +44,7 @@ export function registerPayInvoiceTool(
             text: JSON.stringify(result, null, 2),
           },
         ],
+        structuredContent: result,
       };
     }
   );
