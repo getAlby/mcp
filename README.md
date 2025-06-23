@@ -51,7 +51,7 @@ Once the command has run, copy the output and replace ENCODED_CONNECTION_SECRET.
 
 #### Use the Alby MCP server
 
-1. Go to settings -> Advanced settings -> Integrations
+1. Go to Settings -> Advanced settings -> Integrations
 2. Add a new remote MCP server
 3. Call it `alby`
 4. What is the SSE endpoint URI: `https://mcp.getalby.com/mcp?nwc=ENCODED_NWC_URL` (see above for instructions)
@@ -77,9 +77,9 @@ Add this to your claude_desktop_config.json:
 ### Add to Goose Desktop
 
 1. Open Goose Desktop
-2. Go To Settings
-3. Add a new MCP server
-4. Call it `alby`
+2. Go To Settings -> Advanced Settings
+3. Click on "Add custom Extension"
+4. Call it `alby`, and change the type to `SSE`
 5. What is the SSE endpoint URI: `https://mcp.getalby.com/sse?nwc=ENCODED_NWC_URL` (see above for instructions)
 6. Timeout: 30
 7. Description: no
