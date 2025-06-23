@@ -12,6 +12,8 @@ This MCP server has knowledge of [NWC](https://nwc.dev/), [LNURL](https://github
 
 ## Quick Start
 
+> In case you get stuck, see troubleshooting section below.
+
 ### Use the Alby-Hosted MCP Server
 
 If your agent supports remote MCP servers - SSE (e.g. N8N) or HTTP Streamable transports, you can connect to Alby's MCP server.
@@ -35,15 +37,26 @@ If your agent doesn't support bearer auth, you can pass the NWC connection secre
 
 Example: `https://mcp.getalby.com/sse?nwc=ENCODED_CONNECTION_SECRET` or `https://mcp.getalby.com/mcp?nwc=ENCODED_CONNECTION_SECRET`
 
-_To get ENCODED_CONNECTION_SECRET, open browser devtools and enter this in the console:_
+_To get ENCODED_CONNECTION_SECRET, open browser devtools (right click -> inspect) and enter this in the console, with your own NWC connection secret set:_
 
 ```js
 encodeURIComponent("nostr+walletconnect://...");
 ```
 
-And then copy the output and replace ENCODED_CONNECTION_SECRET. It will look like this: `nostr%2Bwalletconnect%3A%2F%2F...`
+In case there is a message asking for confirmation for pasting, follow the instructions, and then enter the above command again.
+
+Once the command has run, copy the output and replace ENCODED_CONNECTION_SECRET. It will look like this: `nostr%2Bwalletconnect%3A%2F%2F...`
 
 ### Add to Claude Desktop
+
+#### Use the Alby MCP server
+
+1. Go to Settings -> Advanced settings -> Integrations
+2. Add a new remote MCP server
+3. Call it `alby`
+4. What is the SSE endpoint URI: `https://mcp.getalby.com/mcp?nwc=ENCODED_NWC_URL` (see above for instructions)
+
+#### Client-side
 
 Add this to your claude_desktop_config.json:
 
@@ -61,7 +74,18 @@ Add this to your claude_desktop_config.json:
 }
 ```
 
-### Add to Goose
+### Add to Goose Desktop
+
+1. Open Goose Desktop
+2. Go To Settings -> Advanced Settings
+3. Click on "Add custom Extension"
+4. Call it `alby`, and change the type to `SSE`
+5. What is the SSE endpoint URI: `https://mcp.getalby.com/sse?nwc=ENCODED_NWC_URL` (see above for instructions)
+6. Timeout: 30
+7. Description: no
+8. environment variables: no
+
+### Add to Goose CLI
 
 #### Use the Alby MCP server (SSE)
 
@@ -141,7 +165,7 @@ By default NWC MCP Server runs locally in `STDIO` mode.
 
 You can set the following environment variable: `MODE=HTTP` which will enable Streamable HTTP (`http://localhost:3000/mcp`) and SSE (`http://localhost:3000/sse` Note: SSE is deprecated).
 
-HTTP requires bearer authorization, where the token is a wallet's NWC connection secret. (header example: `Authorization: Bearer nostr+walletconnect://...` )
+HTTP requires bearer authorization, where the token is a wallet's NWC connection secret. See the authentication section further above in the README.
 
 ## From Source
 
@@ -174,3 +198,17 @@ Copy `.env.example` to `.env` and update your connection string
 ### Supported Tools
 
 See the [tools directory](./src/tools)
+
+## Troubleshooting
+
+### Model Usage
+
+Make sure you use a decent model (e.g. Claude Sonnet 3.7) otherwise the MCP server will not work.
+
+### Failure to connect to wallet, secret missing
+
+Make sure you copied the entire NWC connection secret, without spaces
+
+### Contact Alby Support
+
+Visit [support.getalby.com](https://support.getalby.com) and we're happy to help you get the MCP server working.
