@@ -2,7 +2,7 @@
   "name": "@getalby/mcp",
   "description": "MCP server for controlling a Lightning wallet using Nostr Wallet Connect",
   "repository": "https://github.com/getAlby/mcp.git",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "main": "build/index.js",
   "bin": {
