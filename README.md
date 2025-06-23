@@ -47,12 +47,13 @@ In case there is a message asking for confirmation for pasting, follow the instr
 
 Once the command has run, copy the output and replace ENCODED_CONNECTION_SECRET. It will look like this: `nostr%2Bwalletconnect%3A%2F%2F...`
 
-### Add to Claude Desktop
+### Add to Claude Web or Claude Desktop
 
-#### Use the Alby MCP server
+#### Use the remote Alby MCP server
 
-1. Go to Settings -> Advanced settings -> Integrations
-2. Add a new remote MCP server
+Currently, at least a Claude Pro subscription is required to be able to connect to remote MCP servers.
+1. Go to Settings -> Integrations
+2. Click on "Add Integration"
 3. Call it `alby`
 4. What is the SSE endpoint URI: `https://mcp.getalby.com/mcp?nwc=ENCODED_NWC_URL` (see above for instructions)
 
