@@ -7,18 +7,27 @@ export function registerGetInfoTool(server: McpServer, client: nwc.NWCClient) {
     "get_info",
     {
       title: "Get Info",
-      description: "Get NWC capabilities of the connected lightning wallet, and general information about the wallet and underlying lightning node",
+      description:
+        "Get NWC capabilities of the connected lightning wallet, and general information about the wallet and underlying lightning node",
       outputSchema: {
-        alias: z.string().describe("Wallet alias"),
-        color: z.string().describe("Wallet color"),
-        pubkey: z.string().describe("Wallet public key"),
-        network: z.string().describe("Network (mainnet/testnet)"),
+        alias: z.string().describe("Node alias"),
+        color: z.string().describe("Node color"),
+        pubkey: z.string().describe("Node public key"),
+        network: z.string().describe("Bitcoin Network (mainnet/testnet)"),
         block_height: z.number().describe("Current block height"),
         block_hash: z.string().describe("Current block hash"),
-        methods: z.array(z.string()).describe("Available NWC methods"),
-        notifications: z.array(z.string()).optional().describe("Available notification types"),
-        metadata: z.unknown().optional().describe("Additional metadata"),
-        lud16: z.string().optional().describe("Lightning address"),
+        methods: z
+          .array(z.string())
+          .describe("NWC methods supported by this connection"),
+        notifications: z
+          .array(z.string())
+          .nullish()
+          .describe("NWC notification types supported by this connection"),
+        metadata: z
+          .unknown()
+          .nullish()
+          .describe("Additional metadata about this connection"),
+        lud16: z.string().nullish().describe("Lightning address of the wallet"),
       },
     },
     async () => {

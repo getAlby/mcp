@@ -1,6 +1,7 @@
 import { nwc } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { transactionSchema } from "./schemas/transaction.js";
 
 export function registerMakeInvoiceTool(
   server: McpServer,
@@ -30,22 +31,7 @@ export function registerMakeInvoiceTool(
           .describe("Optional metadata to include with the payment")
           .nullish(),
       },
-      outputSchema: {
-        type: z.enum(["incoming", "outgoing"]).describe("Transaction type"),
-        state: z.enum(["settled", "pending", "failed"]).describe("Transaction state"),
-        invoice: z.string().describe("BOLT-11 invoice"),
-        description: z.string().describe("Invoice description"),
-        description_hash: z.string().describe("Description hash"),
-        preimage: z.string().describe("Payment preimage"),
-        payment_hash: z.string().describe("Payment hash"),
-        amount: z.number().describe("Amount in millisats"),
-        fees_paid: z.number().describe("Fees paid in millisats"),
-        settled_at: z.number().describe("Settlement timestamp"),
-        created_at: z.number().describe("Creation timestamp"),
-        expires_at: z.number().describe("Expiry timestamp"),
-        settle_deadline: z.number().optional().describe("Settlement deadline"),
-        metadata: z.unknown().optional().describe("Additional metadata"),
-      },
+      outputSchema: transactionSchema,
     },
     async (params) => {
       const result = await client.makeInvoice({

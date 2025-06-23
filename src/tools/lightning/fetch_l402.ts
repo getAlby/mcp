@@ -14,7 +14,10 @@ export function registerFetchL402Tool(
       description: "Fetch a paid resource protected by L402",
       inputSchema: {
         url: z.string().describe("the URL to fetch"),
-        method: z.string().nullish().describe("HTTP request method. Default GET"),
+        method: z
+          .string()
+          .nullish()
+          .describe("HTTP request method. Default GET"),
         body: z
           .string()
           .nullish()
@@ -24,7 +27,6 @@ export function registerFetchL402Tool(
       },
       outputSchema: {
         content: z.string().describe("Response content"),
-        status: z.number().describe("HTTP status code"),
       },
     },
     async (params) => {
@@ -64,7 +66,6 @@ export function registerFetchL402Tool(
 
       const responseData = {
         content: responseContent,
-        status: result.status,
       };
 
       return {
