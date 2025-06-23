@@ -30,7 +30,7 @@ class NWCServer {
       const transport = new StdioServerTransport();
       const server = createMCPServer(client);
       await server.connect(transport);
-      console.log("Server running in STDIO mode");
+      // console.log("Server running in STDIO mode");
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,

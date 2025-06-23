@@ -1,13 +1,18 @@
 import { Invoice } from "@getalby/lightning-tools";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { invoiceSchema } from "./schemas/invoice.js";
 
 export function registerParseInvoiceTool(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "parse_invoice",
-    "Parse a BOLT-11 lightning invoice",
     {
-      invoice: z.string().describe("the bolt11 invoice"),
+      title: "Parse Invoice",
+      description: "Parse a BOLT-11 lightning invoice",
+      inputSchema: {
+        invoice: z.string().describe("the bolt11 invoice"),
+      },
+      outputSchema: invoiceSchema,
     },
     async (params) => {
       const invoice = new Invoice({ pr: params.invoice });
@@ -19,6 +24,7 @@ export function registerParseInvoiceTool(server: McpServer) {
             text: JSON.stringify(invoice, null, 2),
           },
         ],
+        structuredContent: JSON.parse(JSON.stringify(invoice)),
       };
     }
   );

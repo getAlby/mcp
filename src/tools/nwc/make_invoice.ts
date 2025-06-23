@@ -1,32 +1,37 @@
 import { nwc } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { transactionSchema } from "./schemas/transaction.js";
 
 export function registerMakeInvoiceTool(
   server: McpServer,
   client: nwc.NWCClient
 ) {
-  server.tool(
+  server.registerTool(
     "make_invoice",
-    "Create a lightning invoice",
     {
-      amount: z.number().describe("amount in millisats"),
-      expiry: z.number().describe("expiry in seconds").nullish(),
-      description: z
-        .string()
-        .describe("note, memo or description describing the invoice")
-        .nullish(),
-      description_hash: z
-        .string()
-        .describe(
-          "hash of a note, memo or description that is too long to fit within the invoice"
-        )
-        .nullish(),
-      metadata: z
-        .object({})
-        .passthrough()
-        .describe("Optional metadata to include with the payment")
-        .nullish(),
+      title: "Make Invoice",
+      description: "Create a lightning invoice",
+      inputSchema: {
+        amount: z.number().describe("amount in millisats"),
+        expiry: z.number().describe("expiry in seconds").nullish(),
+        description: z
+          .string()
+          .describe("note, memo or description describing the invoice")
+          .nullish(),
+        description_hash: z
+          .string()
+          .describe(
+            "hash of a note, memo or description that is too long to fit within the invoice"
+          )
+          .nullish(),
+        metadata: z
+          .object({})
+          .passthrough()
+          .describe("Optional metadata to include with the payment")
+          .nullish(),
+      },
+      outputSchema: transactionSchema,
     },
     async (params) => {
       const result = await client.makeInvoice({
@@ -43,6 +48,7 @@ export function registerMakeInvoiceTool(
             text: JSON.stringify(result, null, 2),
           },
         ],
+        structuredContent: result,
       };
     }
   );
