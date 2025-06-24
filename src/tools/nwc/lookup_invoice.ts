@@ -12,7 +12,7 @@ export function registerLookupInvoiceTool(
     {
       title: "Lookup Invoice",
       description:
-        "Look up lightning invoice details from a BOLT-11 invoice or payment hash",
+        "Look up lightning invoice details from a BOLT-11 invoice or payment hash. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
       inputSchema: {
         payment_hash: z
           .string()

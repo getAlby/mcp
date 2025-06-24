@@ -11,7 +11,7 @@ export function registerMakeInvoiceTool(
     "make_invoice",
     {
       title: "Make Invoice",
-      description: "Create a lightning invoice",
+      description: "Create a lightning invoice. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
       inputSchema: {
         amount: z.number().describe("amount in millisats"),
         expiry: z.number().describe("expiry in seconds").nullish(),

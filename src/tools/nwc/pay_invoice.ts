@@ -10,7 +10,7 @@ export function registerPayInvoiceTool(
     "pay_invoice",
     {
       title: "Pay Invoice",
-      description: "Pay a lightning invoice",
+      description: "Pay a lightning invoice. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
       inputSchema: {
         invoice: z.string().describe("The lightning invoice to pay"),
         amount: z

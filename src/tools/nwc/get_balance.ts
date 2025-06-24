@@ -10,7 +10,7 @@ export function registerGetBalanceTool(
     "get_balance",
     {
       title: "Get Balance",
-      description: "Get the balance of the connected lightning wallet",
+      description: "Get the balance of the connected lightning wallet. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
       outputSchema: {
         balance: z.number().describe("Current wallet balance in millisats"),
       },

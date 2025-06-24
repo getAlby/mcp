@@ -12,7 +12,7 @@ export function registerListTransactionsTool(
     {
       title: "List Transactions",
       description:
-        "List all transactions from the connected wallet with optional filtering by time, type, and limit",
+        "List all transactions from the connected wallet with optional filtering by time, type, and limit. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
       inputSchema: {
         from: z
           .number()
