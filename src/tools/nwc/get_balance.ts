@@ -12,7 +12,7 @@ export function registerGetBalanceTool(
       title: "Get Balance",
       description: "Get the balance of the connected lightning wallet",
       outputSchema: {
-        balance: z.number().describe("Current wallet balance in sats"),
+        amount_in_sats: z.number().describe("Current wallet balance in sats"),
       },
     },
     async () => {
@@ -20,7 +20,7 @@ export function registerGetBalanceTool(
 
       // Convert millisats to sats
       const convertedBalance = {
-        balance: Math.ceil(balance.balance / 1000), // Round up when converting millisats to sats
+        amount_in_sats: Math.floor(balance.balance / 1000), // Round down when converting millisats to sats as balance
       };
 
       return {

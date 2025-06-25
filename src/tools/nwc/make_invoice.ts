@@ -13,7 +13,7 @@ export function registerMakeInvoiceTool(
       title: "Make Invoice",
       description: "Create a lightning invoice",
       inputSchema: {
-        amount: z.number().describe("amount in sats"),
+        amount_in_sats: z.number().describe("amount in sats"),
         expiry: z.number().describe("expiry in seconds").nullish(),
         description: z
           .string()
@@ -34,8 +34,8 @@ export function registerMakeInvoiceTool(
       outputSchema: transactionSchema,
     },
     async (params) => {
-      const result = await client.makeInvoice({
-        amount: params.amount * 1000, // Convert sats to millisats for NWC
+      const { amount, fees_paid, ...result } = await client.makeInvoice({
+        amount: params.amount_in_sats * 1000, // Convert sats to millisats for NWC
         description: params.description || undefined,
         description_hash: params.description_hash || undefined,
         expiry: params.expiry || undefined,
@@ -45,8 +45,8 @@ export function registerMakeInvoiceTool(
       // Convert millisats back to sats in the response
       const convertedResult = {
         ...result,
-        amount: Math.ceil(result.amount / 1000), // Round up when converting millisats to sats
-        fees_paid: Math.ceil(result.fees_paid / 1000),
+        amount_in_sats: Math.floor(amount / 1000), // Round down when converting millisats to sats
+        fees_paid_in_sats: Math.ceil(fees_paid / 1000), // Round up fees
       };
 
       return {

@@ -61,11 +61,13 @@ export function registerListTransactionsTool(
       // Convert millisats to sats in all transactions
       const convertedResult = {
         ...result,
-        transactions: result.transactions.map((transaction) => ({
-          ...transaction,
-          amount: Math.ceil(transaction.amount / 1000), // Round up when converting millisats to sats
-          fees_paid: Math.ceil(transaction.fees_paid / 1000),
-        })),
+        transactions: result.transactions.map(
+          ({ amount, fees_paid, ...transaction }) => ({
+            ...transaction,
+            amount_in_sats: Math.floor(amount / 1000), // Round down when converting millisats to sats
+            fees_paid_in_sats: Math.ceil(fees_paid / 1000), // Round up fees
+          })
+        ),
       };
 
       return {

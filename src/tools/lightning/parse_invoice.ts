@@ -15,16 +15,22 @@ export function registerParseInvoiceTool(server: McpServer) {
       outputSchema: invoiceSchema,
     },
     async (params) => {
-      const invoice = new Invoice({ pr: params.invoice });
+      // make output consistent with other tools
+      const { satoshi, ...invoice } = new Invoice({ pr: params.invoice });
+
+      const convertedResult = {
+        ...invoice,
+        amount_in_sats: satoshi,
+      };
 
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(invoice, null, 2),
+            text: JSON.stringify(convertedResult, null, 2),
           },
         ],
-        structuredContent: JSON.parse(JSON.stringify(invoice)),
+        structuredContent: JSON.parse(JSON.stringify(convertedResult)),
       };
     }
   );

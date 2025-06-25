@@ -13,7 +13,7 @@ export function registerPayInvoiceTool(
       description: "Pay a lightning invoice",
       inputSchema: {
         invoice: z.string().describe("The lightning invoice to pay"),
-        amount: z
+        amount_in_sats: z
           .number()
           .describe(
             "Optional amount in sats, only provide if paying a zero-amount invoice"
@@ -27,20 +27,22 @@ export function registerPayInvoiceTool(
       },
       outputSchema: {
         preimage: z.string().describe("Payment preimage"),
-        fees_paid: z.number().describe("Fees paid in sats"),
+        fees_paid_in_sats: z.number().describe("Fees paid in sats"),
       },
     },
     async (params) => {
-      const result = await client.payInvoice({
+      const { fees_paid, ...result } = await client.payInvoice({
         invoice: params.invoice,
-        amount: params.amount ? params.amount * 1000 : undefined, // Convert sats to millisats for NWC
+        amount: params.amount_in_sats
+          ? params.amount_in_sats * 1000
+          : undefined, // Convert sats to millisats for NWC
         metadata: params.metadata || undefined,
       });
 
       // Convert millisats back to sats in the response
       const convertedResult = {
         ...result,
-        fees_paid: Math.ceil(result.fees_paid / 1000), // Round up when converting millisats to sats
+        fees_paid_in_sats: Math.ceil(fees_paid / 1000), // Round up fees when converting millisats to sats
       };
 
       return {

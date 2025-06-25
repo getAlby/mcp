@@ -26,7 +26,7 @@ export function registerLookupInvoiceTool(
       outputSchema: transactionSchema,
     },
     async (params) => {
-      const result = await client.lookupInvoice({
+      const { amount, fees_paid, ...result } = await client.lookupInvoice({
         invoice: params.invoice || undefined,
         payment_hash: params.payment_hash || undefined,
       });
@@ -34,8 +34,8 @@ export function registerLookupInvoiceTool(
       // Convert millisats to sats in the response
       const convertedResult = {
         ...result,
-        amount: Math.ceil(result.amount / 1000), // Round up when converting millisats to sats
-        fees_paid: Math.ceil(result.fees_paid / 1000),
+        amount_in_sats: Math.floor(amount / 1000), // Round down when converting millisats to sats
+        fees_paid_in_sats: Math.ceil(fees_paid / 1000), // Round up fees
       };
 
       return {
