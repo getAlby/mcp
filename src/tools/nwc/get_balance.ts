@@ -10,20 +10,25 @@ export function registerGetBalanceTool(
     "get_balance",
     {
       title: "Get Balance",
-      description: "Get the balance of the connected lightning wallet. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
+      description: "Get the balance of the connected lightning wallet",
       outputSchema: {
-        balance: z.number().describe("Current wallet balance in millisats"),
+        amount_in_sats: z.number().describe("Current wallet balance in sats"),
       },
     },
     async () => {
       const balance = await client.getBalance();
 
+      // Convert millisats to sats
+      const convertedBalance = {
+        amount_in_sats: Math.floor(balance.balance / 1000), // Round down when converting millisats to sats as balance
+      };
+
       return {
-        structuredContent: balance,
+        structuredContent: convertedBalance,
         content: [
           {
             type: "text",
-            text: JSON.stringify(balance, null, 2),
+            text: JSON.stringify(convertedBalance, null, 2),
           },
         ],
       };

@@ -10,12 +10,12 @@ export function registerRequestInvoiceFromLightningAddressTool(
     "request_invoice",
     {
       title: "Request Invoice",
-      description: "Request an invoice from a lightning address. Amounts are in sats (1 sat = 1000 millisats). Preferred human-readable unit is sats.",
+      description: "Request an invoice from a lightning address",
       inputSchema: {
         lightning_address: z
           .string()
           .describe("the recipient's lightning address"),
-        amount: z.number().describe("amount in sats"),
+        amount_in_sats: z.number().describe("amount in sats"),
         description: z
           .string()
           .describe("note, memo or description describing the invoice")
@@ -36,20 +36,26 @@ export function registerRequestInvoiceFromLightningAddressTool(
       // fetch the LNURL data
       await ln.fetch();
 
-      const invoice = await ln.requestInvoice({
-        satoshi: params.amount,
+      const { satoshi, ...invoice } = await ln.requestInvoice({
+        satoshi: params.amount_in_sats,
         comment: params.description || undefined,
         payerdata: params.payer_data || undefined,
       });
+
+      // make output consistent with other tools
+      const convertedResult = {
+        ...invoice,
+        amount_in_sats: satoshi,
+      };
 
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(invoice, null, 2),
+            text: JSON.stringify(convertedResult, null, 2),
           },
         ],
-        structuredContent: JSON.parse(JSON.stringify(invoice)),
+        structuredContent: JSON.parse(JSON.stringify(convertedResult)),
       };
     }
   );

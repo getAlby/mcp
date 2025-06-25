@@ -8,7 +8,7 @@ export const invoiceSchema = {
     .string()
     .nullable()
     .describe("URL to verify if the email was paid (LNURL-verify)"),
-  satoshi: z.number().describe("Amount in sats"),
+  amount_in_sats: z.number().describe("Amount in sats"),
   expiry: z.number().nullish().describe("Expiry time in seconds"),
   timestamp: z.number().describe("Creation unix timestamp"),
   createdDate: z.string().describe("Creation date string"),

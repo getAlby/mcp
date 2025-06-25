@@ -12,7 +12,7 @@ export function registerListTransactionsTool(
     {
       title: "List Transactions",
       description:
-        "List all transactions from the connected wallet with optional filtering by time, type, and limit. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
+        "List all transactions from the connected wallet with optional filtering by time, type, and limit",
       inputSchema: {
         from: z
           .number()
@@ -57,14 +57,27 @@ export function registerListTransactionsTool(
         unpaid: params.unpaid || undefined,
         offset: params.offset || undefined,
       });
+
+      // Convert millisats to sats in all transactions
+      const convertedResult = {
+        ...result,
+        transactions: result.transactions.map(
+          ({ amount, fees_paid, ...transaction }) => ({
+            ...transaction,
+            amount_in_sats: Math.floor(amount / 1000), // Round down when converting millisats to sats
+            fees_paid_in_sats: Math.ceil(fees_paid / 1000), // Round up fees
+          })
+        ),
+      };
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(result, null, 2),
+            text: JSON.stringify(convertedResult, null, 2),
           },
         ],
-        structuredContent: result,
+        structuredContent: convertedResult,
       };
     }
   );

@@ -12,7 +12,7 @@ export function registerLookupInvoiceTool(
     {
       title: "Lookup Invoice",
       description:
-        "Look up lightning invoice details from a BOLT-11 invoice or payment hash. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
+        "Look up lightning invoice details from a BOLT-11 invoice or payment hash",
       inputSchema: {
         payment_hash: z
           .string()
@@ -26,18 +26,26 @@ export function registerLookupInvoiceTool(
       outputSchema: transactionSchema,
     },
     async (params) => {
-      const result = await client.lookupInvoice({
+      const { amount, fees_paid, ...result } = await client.lookupInvoice({
         invoice: params.invoice || undefined,
         payment_hash: params.payment_hash || undefined,
       });
+
+      // Convert millisats to sats in the response
+      const convertedResult = {
+        ...result,
+        amount_in_sats: Math.floor(amount / 1000), // Round down when converting millisats to sats
+        fees_paid_in_sats: Math.ceil(fees_paid / 1000), // Round up fees
+      };
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(result, null, 2),
+            text: JSON.stringify(convertedResult, null, 2),
           },
         ],
-        structuredContent: result,
+        structuredContent: convertedResult,
       };
     }
   );
