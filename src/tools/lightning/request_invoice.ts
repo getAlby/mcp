@@ -10,7 +10,7 @@ export function registerRequestInvoiceFromLightningAddressTool(
     "request_invoice",
     {
       title: "Request Invoice",
-      description: "Request an invoice from a lightning address. Amounts are in sats (1 sat = 1000 millisats). Preferred human-readable unit is sats.",
+      description: "Request an invoice from a lightning address",
       inputSchema: {
         lightning_address: z
           .string()

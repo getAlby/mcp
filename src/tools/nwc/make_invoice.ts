@@ -11,9 +11,9 @@ export function registerMakeInvoiceTool(
     "make_invoice",
     {
       title: "Make Invoice",
-      description: "Create a lightning invoice. Amounts are in millisats (1000 millisats = 1 sat). Preferred human-readable unit is sats.",
+      description: "Create a lightning invoice",
       inputSchema: {
-        amount: z.number().describe("amount in millisats"),
+        amount: z.number().describe("amount in sats"),
         expiry: z.number().describe("expiry in seconds").nullish(),
         description: z
           .string()
@@ -35,20 +35,28 @@ export function registerMakeInvoiceTool(
     },
     async (params) => {
       const result = await client.makeInvoice({
-        amount: params.amount,
+        amount: params.amount * 1000, // Convert sats to millisats for NWC
         description: params.description || undefined,
         description_hash: params.description_hash || undefined,
         expiry: params.expiry || undefined,
         metadata: params.metadata || undefined,
       });
+
+      // Convert millisats back to sats in the response
+      const convertedResult = {
+        ...result,
+        amount: Math.ceil(result.amount / 1000), // Round up when converting millisats to sats
+        fees_paid: Math.ceil(result.fees_paid / 1000),
+      };
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(result, null, 2),
+            text: JSON.stringify(convertedResult, null, 2),
           },
         ],
-        structuredContent: result,
+        structuredContent: convertedResult,
       };
     }
   );

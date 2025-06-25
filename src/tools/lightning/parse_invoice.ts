@@ -8,7 +8,7 @@ export function registerParseInvoiceTool(server: McpServer) {
     "parse_invoice",
     {
       title: "Parse Invoice",
-      description: "Parse a BOLT-11 lightning invoice. Amounts are in sats (1 sat = 1000 millisats). Preferred human-readable unit is sats.",
+      description: "Parse a BOLT-11 lightning invoice",
       inputSchema: {
         invoice: z.string().describe("the bolt11 invoice"),
       },
