@@ -52,10 +52,11 @@ Once the command has run, copy the output and replace ENCODED_CONNECTION_SECRET.
 #### Use the remote Alby MCP server
 
 Currently, at least a Claude Pro subscription is required to be able to connect to remote MCP servers.
+
 1. Go to Settings -> Integrations
 2. Click on "Add Integration"
 3. Call it `alby`
-4. What is the SSE endpoint URI: `https://mcp.getalby.com/mcp?nwc=ENCODED_NWC_URL` (see above for instructions)
+4. What is the endpoint URI: `https://mcp.getalby.com/mcp?nwc=ENCODED_NWC_URL` (see above for instructions)
 
 #### Client-side
 
@@ -126,6 +127,14 @@ Add the following to my MCP servers list:
   "disabled": false,
   "autoApprove": []
 }
+```
+
+### Add to Claude Code
+
+#### Use the Alby MCP server
+
+```bash
+claude mcp add --transport http alby https://mcp.getalby.com/mcp --header "Authorization: Bearer nostr+walletconnect://..."
 ```
 
 ### Add to N8N via SSE
