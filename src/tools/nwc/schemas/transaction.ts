@@ -9,7 +9,7 @@ export const transactionSchema = {
   preimage: z.string().nullish().describe("Preimage of settled payment"),
   payment_hash: z.string().describe("Payment hash"),
   amount_in_sats: z.number().describe("Amount in sats"),
-  fees_paid_in_sats: z.number().describe("Fees paid in sats"),
+  fees_paid_in_sats: z.number().nullish().describe("Fees paid in sats"),
   settled_at: z.number().nullish().describe("Timestamp, of settled payment"),
   created_at: z.number().describe("Creation unix timestamp"),
   expires_at: z.number().describe("Expiry unix timestamp"),

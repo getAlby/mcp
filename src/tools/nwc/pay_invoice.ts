@@ -27,7 +27,7 @@ export function registerPayInvoiceTool(
       },
       outputSchema: {
         preimage: z.string().describe("Payment preimage"),
-        fees_paid_in_sats: z.number().describe("Fees paid in sats"),
+        fees_paid_in_sats: z.number().nullish().describe("Fees paid in sats"),
       },
     },
     async (params) => {
@@ -42,7 +42,7 @@ export function registerPayInvoiceTool(
       // Convert millisats back to sats in the response
       const convertedResult = {
         ...result,
-        fees_paid_in_sats: Math.ceil(fees_paid / 1000), // Round up fees when converting millisats to sats
+        fees_paid_in_sats: fees_paid ? Math.ceil(fees_paid / 1000) : 0, // Round up fees when converting millisats to sats
       };
 
       return {
