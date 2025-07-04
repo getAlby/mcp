@@ -43,7 +43,10 @@ export function registerPayInvoiceTool(
       const convertedResult = {
         ...result,
         preimage: preimage || "", // TODO: once Primal supports preimage, remove this
-        fees_paid_in_sats: fees_paid ? Math.ceil(fees_paid / 1000) : 0, // Round up fees when converting millisats to sats
+        fees_paid_in_sats:
+          typeof fees_paid === "number"
+            ? Math.ceil(fees_paid / 1000) // Round up fees when converting millisats to sats
+            : undefined,
       };
 
       return {
