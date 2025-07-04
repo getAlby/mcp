@@ -31,7 +31,7 @@ export function registerPayInvoiceTool(
       },
     },
     async (params) => {
-      const { fees_paid, ...result } = await client.payInvoice({
+      const { fees_paid, preimage, ...result } = await client.payInvoice({
         invoice: params.invoice,
         amount: params.amount_in_sats
           ? params.amount_in_sats * 1000
@@ -42,6 +42,7 @@ export function registerPayInvoiceTool(
       // Convert millisats back to sats in the response
       const convertedResult = {
         ...result,
+        preimage: preimage || "", // TODO: once Primal supports preimage, remove this
         fees_paid_in_sats: fees_paid ? Math.ceil(fees_paid / 1000) : 0, // Round up fees when converting millisats to sats
       };
 
