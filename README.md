@@ -1,4 +1,4 @@
-# Alby Bitcoin Payment MCP Server
+# Alby Bitcoin Payments MCP Server
 
 Connect a bitcoin lightning wallet to your LLM using Nostr Wallet Connect ([NWC](https://nwc.dev)).
 
