@@ -165,6 +165,25 @@ environments `NWC_CONNECTION_STRING=nostr+walletconnect://your_key_here` (create
 
 See the [N8N paid chat workflow](examples/n8n-paid-chat-stdio) for a full example
 
+### Add to Windsurf
+
+#### Use the remote Alby MCP server
+
+1. Download and open your Windsurf Editor 
+2. Click on "Windsurf - Settings" in the toolbar at the bottom -> "Advanced Settings" -> "Cascade" -> Plugins (MCP Servers): Click on "Manage plugins" -> "View raw config" -> you'll see your "mcp_config.json"  
+3. Paste this to your mcp_config.json:
+```json
+{
+    "mcpServers": {
+      "alby": {
+        "serverUrl": "https://mcp.getalby.com/sse?nwc=ENCODED_NWC_URL"
+      }
+    }
+  }
+```
+4. Replace "ENCODED_NWC_URL" as descripted above. Click "Save" and restart the Windsurf editor.
+
+
 ## Modes
 
 ### STDIO
