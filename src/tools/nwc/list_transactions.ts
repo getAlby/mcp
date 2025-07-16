@@ -45,7 +45,10 @@ export function registerListTransactionsTool(
         transactions: z
           .array(z.object(transactionSchema))
           .describe("List of transactions"),
-        total_count: z.number().describe("Total number of transactions"),
+        total_count: z
+          .number()
+          .nullish()
+          .describe("Total number of transactions"),
       },
     },
     async (params) => {

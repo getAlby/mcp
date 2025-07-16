@@ -27,7 +27,7 @@ export function registerPayInvoiceTool(
       },
       outputSchema: {
         preimage: z.string().describe("Payment preimage"),
-        fees_paid_in_sats: z.number().nullish().describe("Fees paid in sats"),
+        fees_paid_in_sats: z.number().nullish().describe("Fees paid in sats"), // TODO: remove nullish once Primal supports it
       },
     },
     async (params) => {
