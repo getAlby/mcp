@@ -10,12 +10,15 @@ export function registerGetInfoTool(server: McpServer, client: nwc.NWCClient) {
       description:
         "Get NWC capabilities of the connected lightning wallet, and general information about the wallet and underlying lightning node",
       outputSchema: {
-        alias: z.string().describe("Node alias"),
-        color: z.string().describe("Node color"),
-        pubkey: z.string().describe("Node public key"),
-        network: z.string().describe("Bitcoin Network (mainnet/testnet)"),
-        block_height: z.number().describe("Current block height"),
-        block_hash: z.string().describe("Current block hash"),
+        alias: z.string().nullish().describe("Node alias"),
+        color: z.string().nullish().describe("Node color"),
+        pubkey: z.string().nullish().describe("Node public key"),
+        network: z
+          .string()
+          .nullish()
+          .describe("Bitcoin Network (mainnet/testnet)"),
+        block_height: z.number().nullish().describe("Current block height"),
+        block_hash: z.string().nullish().describe("Current block hash"),
         methods: z
           .array(z.string())
           .describe("NWC methods supported by this connection"),

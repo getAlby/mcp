@@ -2,7 +2,10 @@ import { z } from "zod";
 
 export const transactionSchema = {
   type: z.enum(["incoming", "outgoing"]).describe("Transaction type"),
-  state: z.enum(["settled", "pending", "failed"]).describe("Transaction state"),
+  state: z
+    .enum(["settled", "pending", "failed"])
+    .nullish()
+    .describe("Transaction state"),
   invoice: z.string().describe("BOLT-11 invoice"),
   description: z.string().nullish().describe("Invoice description"),
   description_hash: z.string().nullish().describe("Description hash"),
@@ -12,7 +15,7 @@ export const transactionSchema = {
   fees_paid_in_sats: z.number().nullish().describe("Fees paid in sats"),
   settled_at: z.number().nullish().describe("Timestamp, of settled payment"),
   created_at: z.number().describe("Creation unix timestamp"),
-  expires_at: z.number().describe("Expiry unix timestamp"),
+  expires_at: z.number().nullish().describe("Expiry unix timestamp"), // TODO: remove nullish once Primal supports it
   settle_deadline: z
     .number()
     .nullish()

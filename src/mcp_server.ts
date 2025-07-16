@@ -15,7 +15,7 @@ import { registerRequestInvoiceFromLightningAddressTool } from "./tools/lightnin
 export function createMCPServer(client: nwc.NWCClient): McpServer {
   const server = new McpServer({
     name: "@getalby/mcp",
-    version: "1.1.0",
+    version: "1.1.1",
     title: "Alby MCP Server",
   });
 
