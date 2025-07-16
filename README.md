@@ -81,23 +81,26 @@ Add this to your claude_desktop_config.json:
 1. Open Goose Desktop
 2. Go To Settings -> Advanced Settings
 3. Click on "Add custom Extension"
-4. Call it `alby`, and change the type to `SSE`
-5. What is the SSE endpoint URI: `https://mcp.getalby.com/sse?nwc=ENCODED_NWC_URL` (see above for instructions)
+4. Call it `alby`, and change the type to `HTTP Streamable`
+5. What is the SSE endpoint URI: `https://mcp.getalby.com/mcp`
 6. Timeout: 30
 7. Description: no
 8. environment variables: no
 
 ### Add to Goose CLI
 
-#### Use the Alby MCP server (SSE)
+#### Use the Alby MCP server
 
 1. Type `goose configure`
-2. Add extension -> Remote Extension
+2. Add extension -> Remote Extension (HTTP Streamable)
 3. Call it `alby`
-4. What is the SSE endpoint URI: `https://mcp.getalby.com/sse?nwc=ENCODED_NWC_URL` (see above for instructions)
+4. What is the HTTP Streamable endpoint URI: `https://mcp.getalby.com/mcp`
 5. Timeout: 30
 6. Description: no
 7. environment variables: no
+8. add custom headers: yes
+9. header name: `Authorization`
+10. header value: `Bearer nostr+walletconnect://...` (replace with your connection secret)
 
 #### Client-side
 
@@ -169,20 +172,21 @@ See the [N8N paid chat workflow](examples/n8n-paid-chat-stdio) for a full exampl
 
 #### Use the remote Alby MCP server
 
-1. Download and open your Windsurf Editor 
-2. Click on "Windsurf - Settings" in the toolbar at the bottom -> "Advanced Settings" -> "Cascade" -> Plugins (MCP Servers): Click on "Manage plugins" -> "View raw config" -> you'll see your "mcp_config.json"  
+1. Download and open your Windsurf Editor
+2. Click on "Windsurf - Settings" in the toolbar at the bottom -> "Advanced Settings" -> "Cascade" -> Plugins (MCP Servers): Click on "Manage plugins" -> "View raw config" -> you'll see your "mcp_config.json"
 3. Paste this to your mcp_config.json:
+
 ```json
 {
-    "mcpServers": {
-      "alby": {
-        "serverUrl": "https://mcp.getalby.com/sse?nwc=ENCODED_NWC_URL"
-      }
+  "mcpServers": {
+    "alby": {
+      "serverUrl": "https://mcp.getalby.com/sse?nwc=ENCODED_NWC_URL"
     }
   }
+}
 ```
-4. Replace "ENCODED_NWC_URL" as descripted above. Click "Save" and restart the Windsurf editor.
 
+4. Replace "ENCODED_NWC_URL" as descripted above. Click "Save" and restart the Windsurf editor.
 
 ## Modes
 
