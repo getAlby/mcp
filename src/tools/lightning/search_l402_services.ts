@@ -41,19 +41,13 @@ export function registerSearchL402ServicesTool(server: McpServer) {
         );
       }
 
-      const text = (await resp.text()).slice(0, 50_000);
-      let structuredContent: Record<string, unknown> | undefined;
-      try {
-        const parsed = JSON.parse(text);
-        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-          structuredContent = parsed as Record<string, unknown>;
-        }
-      } catch {
-        structuredContent = undefined;
-      }
+      const data = await resp.json();
+      const structuredContent = Array.isArray(data)
+        ? { results: data }
+        : (data as Record<string, unknown>);
 
       return {
-        content: [{ type: "text" as const, text }],
+        content: [{ type: "text" as const, text: JSON.stringify(data) }],
         structuredContent,
       };
     }
