@@ -42,9 +42,19 @@ export function registerSearchL402ServicesTool(server: McpServer) {
       }
 
       const text = (await resp.text()).slice(0, 50_000);
+      let structuredContent: Record<string, unknown> | undefined;
+      try {
+        const parsed = JSON.parse(text);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          structuredContent = parsed as Record<string, unknown>;
+        }
+      } catch {
+        structuredContent = undefined;
+      }
 
       return {
         content: [{ type: "text" as const, text }],
+        structuredContent,
       };
     }
   );
