@@ -11,6 +11,7 @@ import { registerFetchL402Tool } from "./tools/lightning/fetch_l402.js";
 import { registerFiatToSatsTool } from "./tools/lightning/fiat_to_sats.js";
 import { registerParseInvoiceTool } from "./tools/lightning/parse_invoice.js";
 import { registerRequestInvoiceFromLightningAddressTool } from "./tools/lightning/request_invoice.js";
+import { registerSearchL402ServicesTool } from "./tools/lightning/search_l402_services.js";
 
 export function createMCPServer(client: nwc.NWCClient): McpServer {
   const server = new McpServer({
@@ -38,6 +39,7 @@ export function createMCPServer(client: nwc.NWCClient): McpServer {
   registerFiatToSatsTool(server);
   registerParseInvoiceTool(server);
   registerRequestInvoiceFromLightningAddressTool(server);
+  registerSearchL402ServicesTool(server);
 
   return server;
 }

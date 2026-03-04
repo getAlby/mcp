@@ -236,6 +236,16 @@ Copy `.env.example` to `.env` and update your connection string
 
 See the [tools directory](./src/tools)
 
+#### L402 Service Discovery
+
+Use `search_l402_services` to discover available L402-paywalled APIs, then `fetch_l402` to call them:
+
+1. Agent calls `search_l402_services` with query "web search"
+2. Agent receives a list of matching services with URLs, pricing, and ratings
+3. Agent calls `fetch_l402` with the chosen service URL
+
+The directory is powered by [satring.com](https://satring.com).
+
 ## Troubleshooting
 
 ### Model Usage
