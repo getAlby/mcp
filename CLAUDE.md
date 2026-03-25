@@ -58,11 +58,11 @@ yarn prepack
 - `@modelcontextprotocol/sdk` — Official MCP TypeScript SDK
 - `@getalby/sdk` — Alby SDK for Lightning operations
 - `@getalby/lightning-tools` — Alby Lightning utilities
-- `express` v5 — HTTP/SSE server
+- `express` v5 — HTTP/SSE server (as of March 2026)
 
 ## Testing
 
-No test suite currently exists. Manual testing via MCP inspector (`yarn inspect`).
+No test suite currently exists (as of March 2026). Manual testing via MCP inspector (`yarn inspect`).
 
 ## Configuration
 
