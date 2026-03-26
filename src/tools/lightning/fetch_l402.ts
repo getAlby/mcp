@@ -49,6 +49,11 @@ export function registerFetchL402Tool(
         wallet: {
           sendPayment: async (invoice: string) => {
             const response = await client.payInvoice({ invoice });
+            if (!response.preimage) {
+              throw new Error(
+                "Wallet did not return a preimage; cannot complete L402 payment"
+              );
+            }
             return { preimage: response.preimage };
           },
         },
