@@ -1,4 +1,4 @@
-import { fiat } from "@getalby/lightning-tools";
+import { getSatoshiValue } from "@getalby/lightning-tools";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
@@ -19,7 +19,7 @@ export function registerFiatToSatsTool(server: McpServer) {
       },
     },
     async (params) => {
-      const satoshi = await fiat.getSatoshiValue({
+      const satoshi = await getSatoshiValue({
         amount: params.fiat_amount,
         currency: params.fiat_currency,
       });

@@ -1,11 +1,11 @@
-import { l402 } from "@getalby/lightning-tools";
-import { webln } from "@getalby/sdk";
+import { fetchWithL402 } from "@getalby/lightning-tools";
+import { nwc } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
 export function registerFetchL402Tool(
   server: McpServer,
-  webln: webln.NostrWebLNProvider
+  client: nwc.NWCClient
 ) {
   server.registerTool(
     "fetch_l402",
@@ -45,8 +45,13 @@ export function registerFetchL402Tool(
         };
       }
 
-      const result = await l402.fetchWithL402(params.url, requestOptions, {
-        webln,
+      const result = await fetchWithL402(params.url, requestOptions, {
+        wallet: {
+          sendPayment: async (invoice: string) => {
+            const response = await client.payInvoice({ invoice });
+            return { preimage: response.preimage };
+          },
+        },
       });
 
       const responseContent = await result.text();
