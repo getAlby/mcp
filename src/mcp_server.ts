@@ -1,4 +1,4 @@
-import { nwc, webln } from "@getalby/sdk";
+import { nwc } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { registerGetInfoTool } from "./tools/nwc/get_info.js";
 import { registerGetWalletServiceInfoTool } from "./tools/nwc/get_wallet_service_info.js";
@@ -29,12 +29,7 @@ export function createMCPServer(client: nwc.NWCClient): McpServer {
   registerListTransactionsTool(server, client);
 
   // Lightning tools
-  registerFetchL402Tool(
-    server,
-    new webln.NostrWebLNProvider({
-      client,
-    })
-  );
+  registerFetchL402Tool(server, client);
   registerFiatToSatsTool(server);
   registerParseInvoiceTool(server);
   registerRequestInvoiceFromLightningAddressTool(server);

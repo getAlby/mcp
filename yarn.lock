@@ -2,10 +2,15 @@
 # yarn lockfile v1
 
 
-"@getalby/lightning-tools@^5.1.2", "@getalby/lightning-tools@^5.2.0":
+"@getalby/lightning-tools@^5.1.2":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@getalby/lightning-tools/-/lightning-tools-5.2.0.tgz#5f71ce9b25c04adeb7e421e920d0a28dfe32e082"
   integrity sha512-8kBvENBTMh541VjGKhw3I29+549/C02gLSh3AQaMfoMNSZaMxfQW+7dcMcc7vbFaCKEcEe18ST5bUveTRBuXCQ==
+
+"@getalby/lightning-tools@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@getalby/lightning-tools/-/lightning-tools-7.0.2.tgz#01e2b4594636d2e26f65233adfedb88b8fc5cc4c"
+  integrity sha512-3jzXk9QgeiuSTr4X1DSg3n/YYC5ju93ZPs+4tE/DIOJA6rbDaWZ8yVLF81neqtcHOrguQirBaM1MD6ZjYPIUHA==
 
 "@getalby/sdk@^5.1.1":
   version "5.1.1"
