@@ -6,6 +6,7 @@ import { nwc } from "@getalby/sdk";
 
 import dotenv from "dotenv";
 import express from "express";
+import cors from "cors";
 import { createMCPServer } from "./mcp_server.js";
 import { addSSEEndpoints } from "./sse.js";
 import { addStreamableHttpEndpoints } from "./streamable_http.js";
@@ -20,7 +21,7 @@ class NWCServer {
       const NWC_CONNECTION_STRING = process.env.NWC_CONNECTION_STRING;
       if (!NWC_CONNECTION_STRING) {
         throw new Error(
-          "NWC_CONNECTION_STRING environment variable is required"
+          "NWC_CONNECTION_STRING environment variable is required",
         );
       }
 
@@ -36,12 +37,29 @@ class NWCServer {
         ErrorCode.InternalError,
         `Failed to connect to NWC wallet: ${
           error instanceof Error ? error.message : String(error)
-        }`
+        }`,
       );
     }
   }
   async runHTTP() {
     const app = express();
+
+    app.use(
+      cors({
+        origin: "*",
+
+        exposedHeaders: ["mcp-session-id"],
+
+        methods: ["GET", "POST", "OPTIONS"],
+
+        allowedHeaders: [
+          "Content-Type",
+          "Authorization",
+          "mcp-session-id",
+          "mcp-protocol-version",
+        ],
+      }),
+    );
 
     addSSEEndpoints(app);
     addStreamableHttpEndpoints(app);
