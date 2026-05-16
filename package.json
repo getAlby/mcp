@@ -34,12 +34,14 @@
     "@getalby/sdk": "^5.1.1",
     "@modelcontextprotocol/sdk": "^1.13.0",
     "@types/node": "^20.11.5",
+    "cors": "^2.8.6",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "typescript": "^5.3.3",
     "websocket-polyfill": "0.0.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.2"
   }
 }
