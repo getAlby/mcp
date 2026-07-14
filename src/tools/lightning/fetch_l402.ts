@@ -2,6 +2,7 @@ import { l402 } from "@getalby/lightning-tools";
 import { webln } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { assertPublicUrl } from "../../security.js";
 
 export function registerFetchL402Tool(
   server: McpServer,
@@ -30,6 +31,9 @@ export function registerFetchL402Tool(
       },
     },
     async (params) => {
+      // Prevent SSRF: only allow fetching public, globally-routable hosts.
+      await assertPublicUrl(params.url);
+
       const requestOptions: RequestInit = {
         method: params.method || undefined,
       };

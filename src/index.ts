@@ -9,6 +9,7 @@ import express from "express";
 import { createMCPServer } from "./mcp_server.js";
 import { addSSEEndpoints } from "./sse.js";
 import { addStreamableHttpEndpoints } from "./streamable_http.js";
+import { hostOriginGuard } from "./security.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -42,6 +43,8 @@ class NWCServer {
   }
   async runHTTP() {
     const app = express();
+
+    app.use(hostOriginGuard());
 
     addSSEEndpoints(app);
     addStreamableHttpEndpoints(app);

@@ -204,6 +204,16 @@ You can set the following environment variable: `MODE=HTTP` which will enable St
 
 HTTP requires bearer authorization, where the token is a wallet's NWC connection secret. See the authentication section further above in the README.
 
+#### HTTP security
+
+The HTTP endpoints validate the `Host` and `Origin` request headers to prevent DNS-rebinding attacks, and `fetch_l402` refuses to fetch non-public (loopback, link-local, private) addresses to prevent SSRF. Configure via environment variables:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `ALLOWED_HOSTS` | `localhost`, `127.0.0.1`, `[::1]` | Extra `Host` header values to accept (comma-separated). Set this to your public hostname when deploying (e.g. `mcp.getalby.com`). |
+| `ALLOWED_ORIGINS` | _(none)_ | Browser origins allowed to call the endpoints (comma-separated). Requests without an `Origin` header (typical for non-browser MCP clients) are always allowed. |
+| `ALLOWED_FETCH_HOSTS` | _(none)_ | Hosts that `fetch_l402` may reach even though they are non-public — e.g. set to `localhost,127.0.0.1` to test against a local L402 server during development. |
+
 ## From Source
 
 ### Prerequisites

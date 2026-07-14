@@ -8,6 +8,11 @@ primary_region = 'fra'
 
 [build]
 
+[env]
+  # Public hostname of this deployment. The host/origin guard rejects any other
+  # Host header, which blocks DNS-rebinding attacks against the MCP endpoints.
+  ALLOWED_HOSTS = 'mcp.getalby.com'
+
 [http_service]
   internal_port = 3000
   force_https = true
