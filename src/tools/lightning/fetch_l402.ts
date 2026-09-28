@@ -57,6 +57,9 @@ export function registerFetchL402Tool(
       try {
         result = await l402.fetchWithL402(params.url, requestOptions, {
           webln,
+          // Don't cache L402 tokens: they'd be shared between all wallets using this server.
+          // (fetchWithL402 types store as DOM Storage but only calls getItem/setItem.)
+          store: new l402.NoStorage() as unknown as Storage,
         });
       } catch (error) {
         // fetch reports a refused redirect as an opaque TypeError.
