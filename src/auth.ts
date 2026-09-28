@@ -1,24 +1,3 @@
-import { nwc } from "@getalby/sdk";
-
-const HEX_KEY_REGEX = /^[0-9a-f]{64}$/i;
-
-function isValidConnectionSecret(connectionSecret: string): boolean {
-  if (!connectionSecret.startsWith("nostr+walletconnect://")) {
-    return false;
-  }
-  try {
-    const { walletPubkey, secret, relayUrl } =
-      nwc.NWCClient.parseWalletConnectUrl(connectionSecret);
-    if (!HEX_KEY_REGEX.test(walletPubkey) || !secret || !HEX_KEY_REGEX.test(secret)) {
-      return false;
-    }
-    const relayProtocol = new URL(relayUrl).protocol;
-    return relayProtocol === "wss:" || relayProtocol === "ws:";
-  } catch {
-    return false;
-  }
-}
-
 function getConnectionSecretFromBearerAuth(
   authorizationHeader: string | undefined
 ) {
@@ -26,7 +5,7 @@ function getConnectionSecretFromBearerAuth(
   if (
     authParts?.length !== 2 ||
     authParts[0] !== "Bearer" ||
-    !isValidConnectionSecret(authParts[1])
+    !authParts[1].startsWith("nostr+walletconnect://")
   ) {
     return undefined;
   }
@@ -36,7 +15,7 @@ function getConnectionSecretFromBearerAuth(
 function getConnectionSecretFromQueryParam(
   nwcParam: string | undefined
 ): string | undefined {
-  if (!nwcParam || !isValidConnectionSecret(nwcParam)) {
+  if (!nwcParam || !nwcParam.startsWith("nostr+walletconnect://")) {
     return undefined;
   }
   return nwcParam;
