@@ -34,7 +34,11 @@ export function addStreamableHttpEndpoints(app: Express) {
         console.log("Request closed");
         transport.close();
         server.close();
-        client.close();
+        try {
+          client.close();
+        } catch (error) {
+          console.error("Error closing NWC client:", error);
+        }
       });
       await server.connect(transport);
       await transport.handleRequest(req, res, req.body);
