@@ -9,6 +9,7 @@ import express from "express";
 import { createMCPServer } from "./mcp_server.js";
 import { addSSEEndpoints } from "./sse.js";
 import { addStreamableHttpEndpoints } from "./streamable_http.js";
+import { hostOriginGuard } from "./security.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -43,12 +44,18 @@ class NWCServer {
   async runHTTP() {
     const app = express();
 
+    app.use(hostOriginGuard());
+
     addSSEEndpoints(app);
     addStreamableHttpEndpoints(app);
 
     const port = parseInt(process.env.PORT || "3000");
-    app.listen(port);
-    console.log("Server running in HTTP mode on port", port);
+    // Bind loopback by default so the listener is not reachable from the rest
+    // of the network. Deployments that must accept external traffic set
+    // BIND_HOST (e.g. "::" for dual-stack, "0.0.0.0" for IPv4).
+    const bindHost = process.env.BIND_HOST || "127.0.0.1";
+    app.listen(port, bindHost);
+    console.log(`Server running in HTTP mode on ${bindHost}:${port}`);
   }
 }
 

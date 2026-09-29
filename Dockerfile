@@ -38,6 +38,7 @@ EXPOSE 3000
 # Environment variables that are needed at runtime
 ENV NODE_ENV=production
 ENV MODE=HTTP
+ENV BIND_HOST=::
 
 # Command to run the application
 CMD ["node", "build/index.js"]

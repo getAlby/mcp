@@ -2,6 +2,7 @@ import { l402 } from "@getalby/lightning-tools";
 import { webln } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { assertPublicUrl } from "../../security.js";
 
 export function registerFetchL402Tool(
   server: McpServer,
@@ -30,8 +31,15 @@ export function registerFetchL402Tool(
       },
     },
     async (params) => {
+      // Only public, globally-routable hosts may be fetched.
+      await assertPublicUrl(params.url);
+
       const requestOptions: RequestInit = {
         method: params.method || undefined,
+        // Redirects are refused rather than followed: a validated public URL
+        // could otherwise redirect to a private one, and each hop would be a
+        // separate L402 challenge that gets paid without the user seeing it.
+        redirect: "error",
       };
 
       if (
@@ -45,9 +53,21 @@ export function registerFetchL402Tool(
         };
       }
 
-      const result = await l402.fetchWithL402(params.url, requestOptions, {
-        webln,
-      });
+      let result: Response;
+      try {
+        result = await l402.fetchWithL402(params.url, requestOptions, {
+          webln,
+          // Don't cache L402 tokens: they'd be shared between all wallets using this server.
+          // (fetchWithL402 types store as DOM Storage but only calls getItem/setItem.)
+          store: new l402.NoStorage() as unknown as Storage,
+        });
+      } catch (error) {
+        // fetch reports a refused redirect as an opaque TypeError.
+        throw new Error(
+          "fetch failed (the URL may redirect, which is not followed): " +
+            (error instanceof Error ? error.message : String(error))
+        );
+      }
 
       const responseContent = await result.text();
       if (!result.ok) {
