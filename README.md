@@ -206,12 +206,11 @@ HTTP requires bearer authorization, where the token is a wallet's NWC connection
 
 #### Request validation
 
-The HTTP endpoints only accept requests whose `Host` header is allowlisted, and only accept a browser `Origin` that has been explicitly permitted. `fetch_l402` only fetches `http(s)` URLs whose hostname resolves to globally-routable addresses — loopback, link-local and private ranges are refused. This is a best-effort check: the hostname is resolved again when fetching, so a DNS server that changes its answer between the two lookups can bypass it. Configure via environment variables:
+The HTTP endpoints only accept requests whose `Host` header is allowlisted. Requests from browsers (carrying an `Origin` header) are refused; MCP clients that aren't browsers don't send one. `fetch_l402` only fetches `http(s)` URLs whose hostname resolves to globally-routable addresses — loopback, link-local and private ranges are refused. This is a best-effort check: the hostname is resolved again when fetching, so a DNS server that changes its answer between the two lookups can bypass it. Configure via environment variables:
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `ALLOWED_HOSTS` | `localhost`, `127.0.0.1`, `[::1]` | `Host` header values to accept (comma-separated). When set, it **replaces** the defaults, so include `localhost` if you still want it. Set this to your public hostname when deploying (e.g. `mcp.getalby.com`). |
-| `ALLOWED_ORIGINS` | _(none)_ | Browser origins allowed to call the endpoints (comma-separated). Requests without an `Origin` header (typical for non-browser MCP clients) are always allowed. |
 | `BIND_HOST` | `127.0.0.1` | Address the HTTP listener binds to. The default keeps it off the network; set `::` (or `0.0.0.0`) when deploying, or when running in Docker and connecting from the host. |
 
 `fetch_l402` does not follow redirects; a URL that redirects returns an error.

@@ -33,11 +33,12 @@ function normalizeHost(host: string): string {
 }
 
 /**
- * Express middleware that rejects requests whose Host or Origin header is not
- * explicitly allowed, as recommended for locally-bound MCP HTTP transports.
+ * Express middleware that rejects requests whose Host header is not explicitly
+ * allowed, and any request sent from a browser (one carrying an Origin header),
+ * as recommended for locally-bound MCP HTTP transports.
  *
  * Defaults to loopback-only. Set ALLOWED_HOSTS (comma-separated) for public
- * deployments and ALLOWED_ORIGINS to permit specific browser origins.
+ * deployments.
  */
 export function hostOriginGuard(): RequestHandler {
   // When ALLOWED_HOSTS is set it replaces the loopback defaults rather than
@@ -49,7 +50,6 @@ export function hostOriginGuard(): RequestHandler {
       normalizeHost
     )
   );
-  const allowedOrigins = new Set(parseCsvEnv(process.env.ALLOWED_ORIGINS));
 
   return (req, res, next) => {
     const host = normalizeHost(req.headers.host ?? "");
@@ -63,16 +63,13 @@ export function hostOriginGuard(): RequestHandler {
       return;
     }
 
-    // An absent Origin (every non-browser MCP client) is allowed; a present
-    // one must be listed, including the empty string and the literal "null".
+    // Non-browser MCP clients send no Origin header. Browser requests are not
+    // supported, so any Origin (including empty or "null") is refused.
     const origin = req.headers.origin;
-    if (origin !== undefined && !allowedOrigins.has(origin.toLowerCase())) {
+    if (origin !== undefined) {
       res
         .status(403)
-        .send(
-          `Forbidden: origin ${origin || "(empty)"} not allowed. ` +
-            `Set ALLOWED_ORIGINS to permit it.`
-        );
+        .send(`Forbidden: browser requests (origin ${origin || "(empty)"}) are not supported.`);
       return;
     }
 
