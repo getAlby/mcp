@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:24-alpine AS builder
+FROM node:24.22.1-alpine AS builder
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -18,7 +18,7 @@ COPY . .
 RUN yarn build
 
 # --- Production Stage ---
-FROM node:24-alpine
+FROM node:24.22.1-alpine
 
 WORKDIR /usr/src/app
 
