@@ -13,6 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --ha=false
+      - name: Build and deploy a fresh Node 24 image
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          IMAGE: registry.fly.io/alby-mcp-server:${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          docker build --pull --tag "$IMAGE" .
+          docker run --rm "$IMAGE" node --version
+          flyctl auth docker
+          docker push "$IMAGE"
+          flyctl deploy --image "$IMAGE" --ha=false
