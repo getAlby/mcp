@@ -11,6 +11,7 @@ export function registerRequestInvoiceFromLightningAddressTool(
     {
       title: "Request Invoice",
       description: "Request an invoice from a lightning address",
+      annotations: { readOnlyHint: false, destructiveHint: false },
       inputSchema: {
         lightning_address: z
           .string()

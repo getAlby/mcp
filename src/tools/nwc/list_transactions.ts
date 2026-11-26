@@ -13,6 +13,7 @@ export function registerListTransactionsTool(
       title: "List Transactions",
       description:
         "List all transactions from the connected wallet with optional filtering by time, type, and limit",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         from: z
           .number()

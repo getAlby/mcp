@@ -8,6 +8,7 @@ export function registerFiatToSatsTool(server: McpServer) {
     {
       title: "Fiat To Sats",
       description: "Convert fiat amounts to sats",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         fiat_currency: z
           .string()

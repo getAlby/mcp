@@ -9,6 +9,7 @@ export function registerParseInvoiceTool(server: McpServer) {
     {
       title: "Parse Invoice",
       description: "Parse a BOLT-11 lightning invoice",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         invoice: z.string().describe("the bolt11 invoice"),
       },

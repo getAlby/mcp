@@ -11,6 +11,7 @@ export function registerPayInvoiceTool(
     {
       title: "Pay Invoice",
       description: "Pay a lightning invoice",
+      annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
         invoice: z.string().describe("The lightning invoice to pay"),
         amount_in_sats: z
