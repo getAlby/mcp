@@ -13,6 +13,7 @@ export function registerFetchL402Tool(
     {
       title: "Fetch L402",
       description: "Fetch a paid resource protected by L402",
+      annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
         url: z.string().describe("the URL to fetch"),
         method: z

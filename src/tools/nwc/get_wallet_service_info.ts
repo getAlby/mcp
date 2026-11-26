@@ -12,6 +12,7 @@ export function registerGetWalletServiceInfoTool(
       title: "Get Wallet Service Info",
       description:
         "Get NWC capabilities, supported encryption and notification types of the connected lightning wallet",
+      annotations: { readOnlyHint: true },
       outputSchema: {
         capabilities: z
           .array(z.string())

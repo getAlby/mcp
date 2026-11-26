@@ -9,6 +9,7 @@ export function registerGetInfoTool(server: McpServer, client: nwc.NWCClient) {
       title: "Get Info",
       description:
         "Get NWC capabilities of the connected lightning wallet, and general information about the wallet and underlying lightning node",
+      annotations: { readOnlyHint: true },
       outputSchema: {
         alias: z.string().nullish().describe("Node alias"),
         color: z.string().nullish().describe("Node color"),

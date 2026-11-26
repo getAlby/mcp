@@ -12,6 +12,7 @@ export function registerMakeInvoiceTool(
     {
       title: "Make Invoice",
       description: "Create a lightning invoice",
+      annotations: { readOnlyHint: false, destructiveHint: false },
       inputSchema: {
         amount_in_sats: z.number().describe("amount in sats"),
         expiry: z.number().describe("expiry in seconds").nullish(),

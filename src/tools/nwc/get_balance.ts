@@ -11,6 +11,7 @@ export function registerGetBalanceTool(
     {
       title: "Get Balance",
       description: "Get the balance of the connected lightning wallet",
+      annotations: { readOnlyHint: true },
       outputSchema: {
         amount_in_sats: z.number().describe("Current wallet balance in sats"),
       },

@@ -13,6 +13,7 @@ export function registerLookupInvoiceTool(
       title: "Lookup Invoice",
       description:
         "Look up lightning invoice details from a BOLT-11 invoice or payment hash",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         payment_hash: z
           .string()
