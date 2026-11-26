@@ -1,7 +1,18 @@
 import { nwc } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { toolResult } from "../tool_result.js";
 import { transactionSchema } from "./schemas/transaction.js";
+
+const outputSchema = {
+  transactions: z
+    .array(z.object(transactionSchema))
+    .describe("List of transactions"),
+  total_count: z
+    .number()
+    .nullish()
+    .describe("Total number of transactions"),
+};
 
 export function registerListTransactionsTool(
   server: McpServer,
@@ -41,15 +52,7 @@ export function registerListTransactionsTool(
           .describe("Filter for unpaid transactions only")
           .nullish(),
       },
-      outputSchema: {
-        transactions: z
-          .array(z.object(transactionSchema))
-          .describe("List of transactions"),
-        total_count: z
-          .number()
-          .nullish()
-          .describe("Total number of transactions"),
-      },
+      outputSchema,
     },
     async (params) => {
       const result = await client.listTransactions({
@@ -76,15 +79,7 @@ export function registerListTransactionsTool(
         ),
       };
 
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(convertedResult, null, 2),
-          },
-        ],
-        structuredContent: convertedResult,
-      };
+      return toolResult(outputSchema, convertedResult);
     }
   );
 }

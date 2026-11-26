@@ -1,6 +1,12 @@
 import { nwc } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { toolResult } from "../tool_result.js";
+
+const outputSchema = {
+  preimage: z.string().describe("Payment preimage"),
+  fees_paid_in_sats: z.number().nullish().describe("Fees paid in sats"), // TODO: remove nullish once Primal supports it
+};
 
 export function registerPayInvoiceTool(
   server: McpServer,
@@ -25,13 +31,10 @@ export function registerPayInvoiceTool(
           .describe("Optional metadata to include with the payment")
           .nullish(),
       },
-      outputSchema: {
-        preimage: z.string().describe("Payment preimage"),
-        fees_paid_in_sats: z.number().nullish().describe("Fees paid in sats"), // TODO: remove nullish once Primal supports it
-      },
+      outputSchema,
     },
     async (params) => {
-      const { fees_paid, preimage, ...result } = await client.payInvoice({
+      const { fees_paid, preimage } = await client.payInvoice({
         invoice: params.invoice,
         amount: params.amount_in_sats
           ? params.amount_in_sats * 1000
@@ -41,7 +44,6 @@ export function registerPayInvoiceTool(
 
       // Convert millisats back to sats in the response
       const convertedResult = {
-        ...result,
         preimage: preimage || "", // TODO: once Primal supports preimage, remove this
         fees_paid_in_sats:
           typeof fees_paid === "number"
@@ -49,15 +51,7 @@ export function registerPayInvoiceTool(
             : undefined,
       };
 
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(convertedResult, null, 2),
-          },
-        ],
-        structuredContent: convertedResult,
-      };
+      return toolResult(outputSchema, convertedResult);
     }
   );
 }
