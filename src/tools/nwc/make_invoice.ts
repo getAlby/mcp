@@ -1,6 +1,7 @@
 import { nwc } from "@getalby/sdk";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { toolResult } from "../tool_result.js";
 import { transactionSchema } from "./schemas/transaction.js";
 
 export function registerMakeInvoiceTool(
@@ -52,15 +53,7 @@ export function registerMakeInvoiceTool(
             : undefined,
       };
 
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(convertedResult, null, 2),
-          },
-        ],
-        structuredContent: convertedResult,
-      };
+      return toolResult(transactionSchema, convertedResult);
     }
   );
 }
